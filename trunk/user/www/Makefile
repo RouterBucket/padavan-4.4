@@ -9,7 +9,7 @@ include $(ROOTDIR)/user/shared/boards.mk
 PROJECT_HOME_URL="https:\/\/bitbucket.org\/padavan\/rt-n56u\/"
 PROJECT_HOME_URL_MOD="https:\/\/github.com\/hanwckf\/rt-n56u\/"
 
-LABEL_COPYRIGHT_TEXT='© 2011-2023 | Project updated by <a href="https:\/\/github.com\/gustavo8000br\/padavan-4.4" target="blank noopener noreferrer nofollow">Padavan kernel 4.4<\/a> | thanks for provide a base for this project <a href="https:\/\/bitbucket.org\/padavan\/rt-n56u" target="blank noopener noreferrer nofollow">Padavan<\/a> \& N56U project community \& <a href="https:\/\/github.com\/hanwckf\/rt-n56u" target="blank noopener noreferrer nofollow">hanwckf<\/a> \& <a href="https:\/\/github.com\/MeIsReallyBa\/padavan-4.4" target="blank noopener noreferrer nofollow">MeIsReallyBa<\/a>'
+LABEL_COPYRIGHT_TEXT='© 2011-2023 | Project updated by <a href="https:\/\/github.com\/gustavo8000br\/padavan-4.4" target="blank noopener noreferrer nofollow">gustavo8000br<\/a> | thanks for provide a base for this project <a href="https:\/\/bitbucket.org\/padavan\/rt-n56u" target="blank noopener noreferrer nofollow">Padavan<\/a> \& N56U project community \& <a href="https:\/\/github.com\/hanwckf\/rt-n56u" target="blank noopener noreferrer nofollow">hanwckf<\/a> \& <a href="https:\/\/github.com\/MeIsReallyBa\/padavan-4.4" target="blank noopener noreferrer nofollow">MeIsReallyBa<\/a>'
 
 BOARD_PATTERN=s/ZVMODELVZ/$(CONFIG_FIRMWARE_PRODUCT_ID)/g
 COPYR_PATTERN=s/ZVCOPYRVZ/$(LABEL_COPYRIGHT_TEXT)/g
