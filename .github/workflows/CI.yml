@@ -64,15 +64,17 @@ jobs:
       - name: Upload firmware to WeTransfer
         run: |
           curl -fsSL git.io/file-transfer | sh
-          ./transfer wet -s -p 16 --no-progress /opt/images/*.trx 2>&1 | tee wetransfer.log
-          echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
-          download_link=$(cat wetransfer.log | grep https) >> $GITHUB_ENV
+          ./transfer fic -s -p 16 --no-progress /opt/images/*.trx 2>&1 | tee 1fichier.log
+          echo "::warning file=1fichier.com::$(cat 1fichier.log | grep https)" >> download_link
+          echo "download_link=${download_link}" >> $GITHUB_ENV
           echo ${{ env.download_link }}
       - name: Send Download link to Telegram 🔗
+        if: ${{ github.event_name != 'release' && success() }} 
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
+          document: /opt/images/*.trx
           message: |
             The ${{ github.event_name }} event triggered final step...
             [Download Link](${{ env.download_link }})
