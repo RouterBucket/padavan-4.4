@@ -36,7 +36,7 @@ jobs:
           sudo apt install libtool-bin gperf python3-docutils autopoint gettext
       - name: Run shell check 🛠️
         run: sh ./trunk/tools/shellcheck.sh
-      - name: Prepare toolchain
+      - name: Prepare toolchain 🔗
         run: |
           cd toolchain-mipsel
           sh dl_toolchain.sh
@@ -64,9 +64,9 @@ jobs:
       - name: Upload firmware to 1Fichier 🌐
         run: |
           curl -fsSL git.io/file-transfer | sh
-          ./transfer fic -p 16 --no-progress /opt/images/*.trx 2>&1 | tee 1fichier.log
-          echo "download_link=$(<1fichier.log)" >> $GITHUB_ENV
-          echo ${{ env.download_link }}
+          ./transfer trs -p 16 --no-progress /opt/images/*.trx 2>&1 | tee log.log
+          cat log.log
+          echo "download_link=$(<log.log)" >> $GITHUB_ENV
       - name: Send Download link to Telegram ✉️
         if: ${{ github.event_name != 'release' && success() }} 
         uses: appleboy/telegram-action@master
@@ -92,7 +92,7 @@ jobs:
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
-          message_file: ${images_dir}/*
+          message_file: ${images_dir}/*.trx
       - name: Upload images to Releases 📤
         if: ${{ github.event_name == 'release' && success() }}
         uses: svenstaro/upload-release-action@2.2.0
