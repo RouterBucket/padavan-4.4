@@ -74,7 +74,8 @@ jobs:
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
             The ${{ github.event_name }} event triggered final step...
-            Download link: [Download WeTransfer](${{ env.download_link }})
+            [Download Link](${{ env.download_link }})
+            [Repo link](https://github.com/RouterBucket/padavan-4.4)
       - name: Upload images to Releases
         if: ${{ github.event_name == 'release' && success() }}
         uses: svenstaro/upload-release-action@2.2.0
