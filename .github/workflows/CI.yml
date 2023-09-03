@@ -81,7 +81,6 @@ jobs:
             
             See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
             
-            Download Link:
             ${{ env.download_link }}
       - name: Send firmware file to Telegram 📩
         if: ${{ github.event_name != 'release' && success() }} 
@@ -89,7 +88,7 @@ jobs:
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
-          message_file: ${images_dir}/*.trx
+          message_file: ${{ env.images_dir }}/${{ env.image_name }}.trx
       - name: Upload images to Releases 📤
         if: ${{ github.event_name == 'release' && success() }}
         uses: svenstaro/upload-release-action@2.2.0
