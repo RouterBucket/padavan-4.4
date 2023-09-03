@@ -61,7 +61,7 @@ jobs:
         with:
           name: ${{ env.image_name }}
           path: ${{ env.images_dir }}/*.7z
-      - name: Upload firmware to 1Fichier 🌐
+      - name: Upload firmware to Transfer.sh 🌐
         run: |
           curl -fsSL git.io/file-transfer | sh
           ./transfer trs -p 16 --no-progress /opt/images/*.trx 2>&1 | tee log.log
