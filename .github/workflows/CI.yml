@@ -63,12 +63,11 @@ jobs:
           path: ${{ env.images_dir }}/*.7z
       - name: Upload firmware to Transfer.sh 🌐
         run: |
+          echo "download_link="" >> $GITHUB_ENV
           curl -fsSL git.io/file-transfer | sh
           ./transfer trs --no-progress /opt/images/*.trx 2>&1 | tee log.log
-          cat log.log
           download_link=`cat log.log`
-          echo "$download_link" 
-          echo "download_link=${download_link}" >> $GITHUB_ENV
+          echo "download_link=${env.download_link}" >> $GITHUB_ENV
       - name: Send Download link to Telegram ✉️
         if: ${{ github.event_name != 'release' && success() }} 
         uses: appleboy/telegram-action@master
