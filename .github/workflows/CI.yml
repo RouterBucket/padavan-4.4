@@ -65,9 +65,7 @@ jobs:
         run: |
           curl -fsSL git.io/file-transfer | sh
           ./transfer fic -p 16 --no-progress /opt/images/*.trx 2>&1 | tee 1fichier.log
-          cat 1fichier.log
-          echo "::warning file=1fichier.com::$(cat 1fichier.log | grep https)" >> download_link
-          echo "download_link=${download_link}" >> $GITHUB_ENV
+          echo "download_link=$(<1fichier.log)" >> $GITHUB_ENV
           echo ${{ env.download_link }}
       - name: Send Download link to Telegram 🔗
         if: ${{ github.event_name != 'release' && success() }} 
@@ -75,11 +73,19 @@ jobs:
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
+          format: markdown
           document: /opt/images/*.trx
           message: |
-            The ${{ github.event_name }} event triggered final step...
-            [Download Link](${{ env.download_link }})
-            [Repo link](https://github.com/RouterBucket/padavan-4.4)
+            Commit message: ${{ github.event.commits[0].message }}
+            
+            [Repository](${{ github.repository }})
+            
+            See changes: [Changes](https://github.com/${{ github.repository }}/commit/${{github.sha}})
+            
+            Download Link: 
+            ```text
+            ${{ env.download_link }}
+            ```
       - name: Upload images to Releases
         if: ${{ github.event_name == 'release' && success() }}
         uses: svenstaro/upload-release-action@2.2.0
