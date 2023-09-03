@@ -65,6 +65,15 @@ jobs:
           curl -fsSL git.io/file-transfer | sh
           ./transfer wet -s -p 16 --no-progress /opt/images/*.trx 2>&1 | tee wetransfer.log
           echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
+          echo "download_link=$(cat wetransfer.log | grep https)" >> $GITHUB_ENV
+      - name: send custom message
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            The ${{ github.event_name }} event triggered final step...
+            Download link: [Download WeTransfer](${{ env.download_link }})
       - name: Upload images to Releases
         if: ${{ github.event_name == 'release' && success() }}
         uses: svenstaro/upload-release-action@2.2.0
