@@ -63,9 +63,10 @@ jobs:
           path: ${{ env.images_dir }}/*.7z
       - name: Upload firmware to Transfer.sh 🌐
         run: |
-          curl -fsSL git.io/file-transfer | sh
-          ./transfer trs --no-progress /opt/images/*.trx 2>&1 | tee log.log
-          download_link=`cat log.log` >> $GITHUB_ENV
+          curl -fsSL git.io/file-transfer | sh 
+          ./transfer trs --no-progress /opt/images/*.trx 2>&1 | tee log.log 
+          echo "::warning file=transfer.sh::$(cat log.log | grep https)"
+          echo "download_link=$(cat log.log | grep https)" >> $GITHUB_ENV
       - name: Send Download link to Telegram ✉️
         if: ${{ github.event_name != 'release' && success() }} 
         uses: appleboy/telegram-action@master
