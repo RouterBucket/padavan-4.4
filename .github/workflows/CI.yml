@@ -64,7 +64,8 @@ jobs:
       - name: Upload firmware to 1Fichier
         run: |
           curl -fsSL git.io/file-transfer | sh
-          ./transfer fic -s -p 16 --no-progress /opt/images/*.trx 2>&1 | tee 1fichier.log
+          ./transfer fic -p 16 --no-progress /opt/images/*.trx 2>&1 | tee 1fichier.log
+          cat 1fichier.log
           echo "::warning file=1fichier.com::$(cat 1fichier.log | grep https)" >> download_link
           echo "download_link=${download_link}" >> $GITHUB_ENV
           echo ${{ env.download_link }}
