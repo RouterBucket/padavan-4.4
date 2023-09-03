@@ -72,19 +72,16 @@ jobs:
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
-          format: markdown
           message: |
             Commit message: ${{ github.event.commits[0].message }}
             
-            [Repository](https://github.com/${{ github.repository }})
-            [Releases](https://github.com/${{ github.repository }}/releases)
+            Repository: https://github.com/${{ github.repository }}
+            Releases: https://github.com/${{ github.repository }}/releases
             
-            See changes: [Changes](https://github.com/${{ github.repository }}/commit/${{github.sha}})
+            See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
             
-            Download Link: 
-            ```text
+            Download Link:
             ${{ env.download_link }}
-            ```
       - name: Send firmware file to Telegram 📩
         if: ${{ github.event_name != 'release' && success() }} 
         uses: appleboy/telegram-action@master
