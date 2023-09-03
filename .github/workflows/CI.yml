@@ -74,7 +74,7 @@ jobs:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           format: markdown
-          document: /opt/images/*.trx
+          document: ${images_dir}/*
           message: |
             Commit message: ${{ github.event.commits[0].message }}
             
