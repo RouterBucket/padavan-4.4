@@ -80,7 +80,8 @@ jobs:
           message: |
             Commit message: ${{ github.event.commits[0].message }}
             
-            [Repository](${{ github.repository }})
+            [Repository](https://github.com/${{ github.repository }})
+            [Releases](https://github.com/${{ github.repository }}/releases)
             
             See changes: [Changes](https://github.com/${{ github.repository }}/commit/${{github.sha}})
             
