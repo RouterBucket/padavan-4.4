@@ -64,11 +64,10 @@ jobs:
       - name: Upload firmware to Transfer.sh 🌐
         run: |
           curl -fsSL git.io/file-transfer | sh
-          ./transfer trs -p 16 --no-progress /opt/images/*.trx 2>&1 | tee log.log
+          ./transfer trs --no-progress /opt/images/*.trx 2>&1 | tee log.log
           cat log.log
-          while read download_link; do    
-            echo $download_link
-          done < log.log
+          download_link=`cat log.log`
+          echo "$download_link" 
           echo "download_link=${download_link}" >> $GITHUB_ENV
       - name: Send Download link to Telegram ✉️
         if: ${{ github.event_name != 'release' && success() }} 
