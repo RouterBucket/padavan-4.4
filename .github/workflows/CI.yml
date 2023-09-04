@@ -82,13 +82,6 @@ jobs:
             See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
             
             ${{ env.download_link }}
-      - name: Send firmware file to Telegram 📩
-        if: ${{ github.event_name != 'release' && success() }} 
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.TELEGRAM_TO }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          message_file: ${{ env.images_dir }}/${{ env.targets }}.trx
       - name: Upload images to Releases 📤
         if: ${{ github.event_name == 'release' && success() }}
         uses: svenstaro/upload-release-action@2.2.0
