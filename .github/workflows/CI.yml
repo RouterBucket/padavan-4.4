@@ -11,7 +11,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   build:
-    name: build
+    name: build 🏗️
     runs-on: ubuntu-20.04
     if: ${{ !(github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')) }}
     env:
@@ -30,24 +30,24 @@ jobs:
            # targets: "MI-R3G JCG-AC860M NETGEAR-BZV MI-R3P R2100 RM2100 MSG1500 BELL-A040WQ"
     steps:
       - uses: actions/checkout@v2
-      - name: Prepare environment
+      - name: Prepare environment 🪚
         run: |
           sudo apt update
           sudo apt install libtool-bin gperf python3-docutils autopoint gettext
-      - name: Run shellcheck
+      - name: Run shellcheck 🛠️
         run: sh ./trunk/tools/shellcheck.sh
-      - name: Prepare toolchain
+      - name: Prepare toolchain 🔗
         run: |
           cd toolchain-mipsel
           sh dl_toolchain.sh
-      - name: Start build
+      - name: Start build 🏗️
         run: |
           cd trunk
           mkdir -p ${images_dir}
           for m in $targets; do fakeroot ./build_firmware_ci $m; \
           if [ $? = 0 ]; then cp -f images/*.trx ${images_dir}/$m.trx; else exit 1; fi; \
           ./clear_tree_simple >/dev/null 2>&1; done
-      - name: Create archive
+      - name: Create archive 💾
         if: ${{ github.event_name != 'release' && success() }}
         run: |
           ls -lh ${images_dir}
@@ -55,38 +55,34 @@ jobs:
           image_name=images_${build_variant}_${GIT_VERSION} || image_name=images_${build_variant}
           cd ${images_dir}; md5sum *.trx |tee md5sum.txt; 7z a -mx=9 ${image_name}.7z ./*
           echo "image_name=${image_name}" >> $GITHUB_ENV
-      - name: Upload images to Artifact
+      - name: Upload images to Artifact 📤
         if: ${{ github.event_name != 'release' && success() }}
         uses: actions/upload-artifact@v2.2.1
         with:
           name: ${{ env.image_name }}
           path: ${{ env.images_dir }}/*.7z
-      - name: Upload firmware to 1Fichier
+      - name: Upload firmware to Transfer.sh 🌐
         run: |
-          curl -fsSL git.io/file-transfer | sh
-          ./transfer fic -p 16 --no-progress /opt/images/*.trx 2>&1 | tee 1fichier.log
-          echo "download_link=$(<1fichier.log)" >> $GITHUB_ENV
-          echo ${{ env.download_link }}
-      - name: Send Download link to Telegram 🔗
+          curl -fsSL git.io/file-transfer | sh 
+          ./transfer trs --no-progress /opt/images/*.trx 2>&1 | tee log.log 
+          echo "::warning file=transfer.sh::$(cat log.log | grep https)"
+          echo "download_link=$(cat log.log | grep https)" >> $GITHUB_ENV
+      - name: Send Download link to Telegram ✉️
         if: ${{ github.event_name != 'release' && success() }} 
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
-          format: markdown
-          document: ${images_dir}/*
           message: |
             Commit message: ${{ github.event.commits[0].message }}
             
-            [Repository](${{ github.repository }})
+            Repository: https://github.com/${{ github.repository }}
+            Releases: https://github.com/${{ github.repository }}/releases
             
-            See changes: [Changes](https://github.com/${{ github.repository }}/commit/${{github.sha}})
+            See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
             
-            Download Link: 
-            ```text
             ${{ env.download_link }}
-            ```
-      - name: Upload images to Releases
+      - name: Upload images to Releases 📤
         if: ${{ github.event_name == 'release' && success() }}
         uses: svenstaro/upload-release-action@2.2.0
         with:
